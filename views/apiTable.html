@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>API SPEC DOCUMENT</title>
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap-reboot.min.css"> -->
+    <link rel="stylesheet" href="css/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-4.3.1-dist/css/bootstrap-grid.min.css">
+    <!-- font -->
+    <link rel="stylesheet" href="css/soldev/css/layout.css">
+    <link rel="stylesheet" href="css/soldev/css/searchTable.css">
+    <link rel="stylesheet" href="css/fontawesome-free-5.8.2-web/css/all.min.css">
+
+    <!--jsonformatter-->
+    <link rel="stylesheet" href="css/jQuery-jsonFormatter/source/jsonFormatter.min.css">
+
+    <script src="css/jQuery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="vue/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.context.min.css"> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> 
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+    <script src="css/jQuery-3.4.1/jsoneditor.js"></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="css/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>   
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+
+<body class="application-form">
+    <div id="apiTable" v-cloak>
+        <!--삭제시 뜨는 확인창 in Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">확인</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">삭제할까요?</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-confirm-no">취소</button>
+                        <button type="button" class="btn btn-primary" id="btn-confirm-yes">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!------ 새 메소드 추가 Modal ------>
+        <div class="modal fade" id="addNewMethod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">새 메소드 추가</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="methodModal" id="methodModal">
+                         <!--   <div class="form-group row">
+                                <label for="Method" class="col-sm-2 col-form-label">Category</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" v-model="category"> 
+                                        <option v-for="option in categoryOption" v-bind:value="option.category" v-model="category">
+                                            {{option.category}}
+                                        </option>
+                                       <option>APISYS</option>
+                                        <option>inmind</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="float-right btn btn-sm btn-outline-primary" v-show="showInput" v-on:click="onAddCategory()">추가</button>
+                                </div>
+                            </div>-->
+                            <div class="form-group row">
+                                <label for="title" class="col-sm-2 col-form-label">Category</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="category" name="category" v-model="category" placeholder="영문 소문자로 입력해 주세요">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="title" class="col-sm-2 col-form-label">Title</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="title" name="title" v-model="title">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="title" class="col-sm-2 col-form-label">URL</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="url" name="url" v-model="url">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Method" class="col-sm-2 col-form-label">Method</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" id="methodType" name="methodType" v-model="methodType"> 
+                                        <option>GET</option>
+                                        <option>POST</option>
+                                        <option>PUT</option>
+                                        <option>DELETE</option>
+                                        <option>OPTION</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="type" class="col-sm-2 col-form-label">Type</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" id="requestType" name="requestType" v-model="requestType">
+                                        <option>REAL</option>
+                                        <option>STUB</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="tag" class="col-sm-2 col-form-label">Tag</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="tags" name="tags" v-model="tags">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="desc" class="col-sm-2 col-form-label">설명</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" id="note" name="note" v-model="note" rows="2"></textarea>
+                                </div>
+                            </div>
+                                                    
+<!--입력 매개변수----------------------------->
+
+                            <div class="req-msg-wrap bg-light" id="reqMsg">
+                                <div class="clearfix modal_msg_align_center">
+                                    <p class="title float-left"> 입력 매개변수</p>
+                                        <div>
+                                            <button type="button" class="btn btn-sm btn-outline-success" id="btnInputPart" v-on:click="showTogle('input','inputParam')">입력창</button>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-sm btn-outline-success" id="btnTablePart" v-on:click="showTogle('table','inputParam')">테이블</button>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn-sm btn btn-outline-success"  v-on:click="inputJsonPretty()">변환</button>
+                                        </div>
+                                </div>
+                                <div class="req-msg-desc bg-light">
+                                    <div class="form-group row">
+                                        <label for="inputParam" class="col-sm-2 col-form-label" v-show="showInput">JSON 입력창</label>
+                                        <div class="col-sm-8" id="inputJsonArea" v-show="showInput">
+                                            <textarea class="form-control" id="inputParam" rows="5" v-model="inputParam" v-show="showInput" placeholder="JSON으로 입력해 주세요"></textarea>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="button" class="float-right btn btn-sm btn-outline-primary" v-show="showInput" v-on:click="onSaveJson('input')">저장</button>
+                                        </div>
+                                       <div class="col-sm-12 mt-3" id="inputJsonTable" v-show="showTable">
+                                           <!-- Json to Table 보여지는 곳-->
+                                       </div>
+                                    </div>
+                                </div>
+                                <div class="req-msg-desc bg-light" id="inputTableArea">
+                                    <div class="form-group row">
+                                        
+                                    </div>
+                                </div>
+                            </div>            
+                                      
+<!--출력 매개변수----------------------------->
+
+                            <div class="req-msg-wrap bg-light" id="reqMsg">
+                                <div class="clearfix modal_msg_align_center">
+                                    <p class="title float-left"> 출력 매개변수</p>
+                                    <div>
+                                        <button type="button" class="btn btn-sm btn-outline-success" id="btnOutputPart" v-on:click="showTogle('input','outputParam')" >입력창</button>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-sm btn-outline-success" id="btnOutTablePart" v-on:click="showTogle('table','outputParam')">테이블</button>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn-sm btn btn-outline-success"  v-on:click="outputJsonPretty()">변환</button>
+                                    </div>
+                                </div>
+                                <div class="req-msg-desc bg-light">
+                                    <div class="form-group row">
+                                        <label for="outputParam" class="col-sm-2 col-form-label" v-show="showOutput">JSON입력</label>
+                                        <div class="col-sm-8" id="outputJsonArea" v-show="showOutput">
+                                            <textarea class="form-control" id="outputParam" rows="5" v-model="outputParam" v-show="showOutput" placeholder="JSON으로 입력해 주세요"></textarea>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="button" class="float-right btn btn-sm btn-outline-primary" v-show="showOutput" v-on:click="onSaveJson('output')">저장</button>
+                                        </div>
+                                        <div class="col-sm-12 mt-3" id="outputJsonTable" v-show="showOutTable">
+                                            <!-- Json to Table 보여지는 곳-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>   
+                    
+  <!--응답 메세지---------------------------->
+                            <div class="res-msg-wrap bg-light">
+                                <div class="clearfix ">
+                                    <p class="title float-left"> 응답 메시지 (Response Message)</p>
+                                </div>
+                                <!-- alert -->
+                                <div class="alert alert-danger fade show" role="alert" style="display:none;">
+                                    삭제되었습니다.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div v-for="(responseCase, index) in responseCases" id="replace-wrapper">
+                                    <div class="res-msg-desc bg-light" >
+                                        <div class="form-group row">
+                                            <label for="repTitle" class="col-sm-2 col-form-label">Title</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="resTitle" name="resTitle" v-model="responseCase.resTitle">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <button type="button" class="float-right btn btn-outline-danger btn-sm btn-delete"  v-on:click="deleteResMsg(index)" >삭제</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="defaultCheck" class="col-sm-2 col-form-label">DefaultCheck</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="resOption" name="resOption" v-model="responseCase.resOption">
+                                                    <option value="" disabled selected> 기본응답메세지 여부입니다. 필히 등록해주세요. YES가 꼭 하나 있어야 합니다 </option>
+                                                    <option>YES</option>
+                                                    <option>NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="responseCode" class="col-sm-2 col-form-label">Response Code</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="resCode" name="resCode" v-model="responseCase.resCode" @change="validResCode(index)" placeholder="숫자만 입력해 주세요">
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group row">
+                                            <label for="responseType" class="col-sm-2 col-form-label">Response Type</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="resType" name="resType" v-model="responseCase.resType">
+                                            </div>
+                                        </div> -->
+                                        <div class="form-group row">
+                                            <label for="responseType" class="col-sm-2 col-form-label">Response Type</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="resType" name="resType" v-model="responseCase.resType">
+                                                    <option>application/json</option>
+                                                    <option>application/x-www-form-urlencode</option>
+                                                    <option>application/xml</option>
+                                                    <option>text/xml</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="resBodyGorup">
+                                            <div class="col-sm-1">
+                                                <label for="body" class="col-sm-2 col-form-label">Body</label>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <button type="button" class="float-right btn btn-outline-success"  v-on:click="prettyJson()" style="font-size: 10px;" >변환</button>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" id="resBody" name="resBody" rows="10" v-model="responseCase.resBody" placeholder="JSON으로 입력해 주세요"></textarea>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    
+                                </div> 
+                                <div class="btn-plus-wrap text-center">
+                                    <button type="button" class="btn btn-secondary rounded-circle btn-plus" v-on:click="addResMsg()">+</button>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="button" class="btn btn-primary" name="modalSave" v-on:click="onSaveData()">저장</button>
+                                <button type="button" class="btn btn-danger btn-delete" name="modalDelete" v-on:click="onDeleteData()" >삭제</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="container">
+                <div class="col-sm-8">
+                    <span class="title page-title" style="font-size: 17px; " >📝 API SPEC DOCUMENT / </span>
+                    <input type="text" v-model="selectedCategory" size="12" readonly disabled required  style="border: 0px ;text-align: left;  font-size: 25px; font-style: inherit; ">
+                </div>
+                <div class="col-sm-3 col-md-push-2">
+                        <select class="form-control" id="selectCategory" @change="onChangeSelect">
+                         <option value="" disabled selected hidden>📌 카테고리 선택</option>
+                         <option v-for="option in categoryOption" v-bind:value="option._id" >{{option.category}}</option>
+                         <!--<option value="inmind">inmind</option>-->
+                         <!--<option value="smartfarm">smartfarm</option>-->
+                        </select>
+                </div>
+                <div class="co2-sm-2 col-md-push-3">
+                    <button type="button" class="float-right btn btn-sm btn-outline-primary" v-show="showInput" v-on:click="onAddCategory()">카테고리추가</button>
+                </div>
+            </nav>
+   
+
+        </div>
+        <div class="container-fluid">
+            <div class="container">
+                <div class="inner-wrap mt-5">
+                    <div class="mt-4">
+                        <form>
+                            <div class="input-group mb-2">
+                                <input type="text" id="inputTag" class="form-control"  placeholder="검색할 태그를 입력해주세요" aria-label="검색할 태그를 입력해주세요" aria-describedby="search" onKeyDown="return onKeyEnter()" >
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" v-on:click="onSearchTag()">조회</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mt-5">
+                        <div class="clearfix">
+                            <h3 class="float-left title table-title"></h3>
+                            <div class="float-right"><button type="button" class="btn btn-outline-primary"  data-toggle="modal" data-target="#addNewMethod" v-on:click="onInit()">새 메소드 추가</button>
+                        </div>
+                        </div>
+                        <template>
+                            <div class="table-wrap mt-2">
+                                <table class="table table-hover" >
+                                    <colgroup>
+                                        <col width="5%">
+                                        <col width="10%">
+                                        <col width="25%">
+                                        <col width="10%">
+                                        <col width="*%">
+                                        <col width="13%">
+                                    </colgroup>
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" class="text-center">No.</th>
+                                            <th scope="col" class="text-center">Category</th>
+                                            <th scope="col" class="text-center">Title</th>
+                                            <th scope="col" class="text-center">Type</th>
+                                            <th scope="col" class="text-center">URL</th>
+                                            <th scope="col" class="text-center">Response Code</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       <tr v-for="(method, index) in methodLists" v-on:click="detailModal(method._id)" data-toggle="modal" data-target="#addNewMethod">
+                                            <td class="text-center">{{index+1+((nowPage-1)*pageRecordCount)}}</td>
+                                            <td class="text-center">{{method.category}}</td>
+                                            <td class="text-left">{{method.title}}</td>
+                                            <td class="text-center"><span class="btn btn-secondary btn-sm">{{method.requestType}}</span></td>
+                                            <td class="text-left">{{method.url}}</td>
+                                            <td class="text-center"><span class="btn btn-warning btn-sm">{{method.responseCases[method.responseCaseIndex].resCode}}</span></td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-wrap mt-5">
+                                <page-component v-html:pagetag="paging"></page-component>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+<script>
+
+        Vue.component('page-component',{
+            template:'<ul class="pagination justify-content-center">{{paging}}</ul>',
+            props:['paging']
+        })
+
+
+        var apiTableVue = new Vue({
+            el:"#apiTable",
+            data:{
+                    paging:'', //하단 페이징 부분 html 보여주는 변수 
+                    nowPage:1, // 현재 페이지 번호
+                    totalCount:0, // 전체카운트
+                    pageCount:10, //페이지당 보여줄 하단 번호 수*
+                    pageRecordCount:20, // 페이지당 보여줄 레코드 수
+
+
+                    //입력,출력매개변수 json과 table을 위한 변수
+                    showInput:true,
+                    showTable:false,
+                    showOutput:true,
+                    showOutTable:false,
+
+                    methodId:'', //각 메소드의 고유 ID
+                    methodLists:[],
+                    tempMethodLists:[],
+                    test:[],
+                    categoryOption:[],
+                    category:'',
+                    selectedCategory:'',
+                    selectedCategoryId:'',
+                    title: '',
+                    url: '',
+                    methodType: '',
+                    requestType: '',
+                    tags: '',
+                    note: '',
+                    createDateTime:'',
+                    lastUpdateTime:'',
+                    inputParam: '',
+                    outputParam: '',
+                    responseCaseIndex :'', 
+                    responseCases : [       
+                                        { 
+                                            "resTitle" : "", 
+                                            "resCode" : "", 
+                                            "resType" : "",
+                                            "resOption" : "",
+                                            "resBody" : ""
+                                        }
+                                    ]
+                       
+                
+            },
+            created:function(){
+                var $this = this;
+                $this.setNowCategory();
+                $this.getListCategory();
+            },
+            methods:{
+                inputJsonPretty : function(){
+                    var badJSON = document.getElementById('inputParam').value;
+                    var parseJSON = JSON.parse(badJSON);
+                    var JSONInPrettyFormat = JSON.stringify(parseJSON, undefined, 4);
+                    document.getElementById('inputParam').value = JSONInPrettyFormat;
+                },
+                outputJsonPretty : function(){
+                    var badJSON = document.getElementById('outputParam').value;
+                    var parseJSON = JSON.parse(badJSON);
+                    var JSONInPrettyFormat = JSON.stringify(parseJSON, undefined, 4);
+                    document.getElementById('outputParam').value = JSONInPrettyFormat;
+                },
+                prettyJson : function(){
+                    //var childrens = $('#replace-wrapper').children('#resBodyGorup');
+                    //console.log(childrens);
+                },
+                setNowCategory : function(){
+                    //선택했었던 카테고리 항목으로 리스트 조회하는 것
+                    var $this = this;
+                    $.ajax({
+                        type:"GET",
+                        url: "/data/selected/category",
+                        contentType:'application/json',
+                        dataType:"json",
+                        async : true,
+                        success:function(data){
+
+                        if(data.length != 0){
+                            $this.selectedCategory = data[0].category; //현재 선택되어있는 카테고리항목
+                            $this.selectedCategoryId = data[0].id; //현재 선택되어있는 카테고리항목의 id
+                            $this.onSearchCategory(data[0].category); //선택한 항목의 리스트 조회
+                        }
+                        else{
+                            //모든리스트조회하기
+                            $this.selectedCategory = "ALL"; //현재 선택되어있는 카테고리항목
+                            $this.selectedCategoryId = "60062d4dcd37ce5294478007"; //현재 선택되어있는 카테고리항목의 id
+                            $this.onSearchCategory("ALL"); //선택한 항목의 리스트 조회
+                        }
+
+                        },
+                        error:function(e){
+                            alert(e.responseText);
+                        }
+                    });                    
+
+                },
+                onSearchCategory : function(category){
+                //카테고리로 선택했을 때 나오는 리스트
+                    var $this = this;
+                    $.ajax({
+                        type:"GET",
+                        url: "/data/methods/list/"+category,
+                        contentType:'application/json',
+                        dataType:"json", 
+                        success:function(data){
+                            console.log(data);
+                            
+                            //배열 index가 0부터 시작해서 slice할 때 맞지 않아서 생기는 문제 때문에 0번째에 초기화하는 데이터를 임의로 넣어서 처리
+                            //slice가 -1부터시작하게 하면 배열끝에서부터의 길이를 나타내기 때문에 이런 방식을 취하게 됨.
+                            $this.tempMethodLists = [
+                                                      {
+                                                        "msg": "초기화"
+                                                      }
+                                                    ]
+                            for(var index =0; index<data.length; index++){
+                                $this.tempMethodLists.push(data[index]);    
+                            }
+
+                            $this.methodLists = data;
+                           // $this.tempMethodLists = data;
+                            $this.totalCount = $this.methodLists.length; 
+                            $this.nowPage=1; //카테고리변경시 현재 페이지가 첫번째로 갱신되도록 하기 위해서 
+                            $this.page();
+                        },
+                        error:function(e){
+                            alert(e.responseText);
+                        }
+                    });
+                     
+                },
+                getListCategory : function(){
+                    //카테고리 항목 리스트
+                    var $this = this;
+                    $.ajax({
+                            type:"GET",
+                            url: "/data/category",
+                            contentType:'application/json',
+                            dataType:"json",
+                            async : true,
+                            success:function(data){
+                                $this.categoryOption = data;
+                            },
+                            error:function(e){
+                                alert(e.responseText);
+                            }
+                        });  
+                },
+                onAddCategory:function(){
+
+                    var inputCategory = prompt("추가 할 카테고리를 입력해주세요!");
+
+                    if(inputCategory != null){
+
+                        var requestParam={
+                            category: inputCategory
+                            };
+
+                        $.ajax({
+                                    type:"POST",
+                                    url: "/data/category",
+                                    contentType:'application/json',
+                                    dataType:"json",
+                                    data: JSON.stringify(requestParam),
+                                    success:function(response){
+                                        console.log(response);
+                                        alert(inputCategory+'가 추가되었습니다!');
+                                        location.reload(); // 리스트 갱신시키기 위해서
+                                    },
+                                    error:function(e){
+                                        alert(e.responseText);
+                                    }
+                                });
+                    }
+                    else{
+
+                    }
+                },
+                onChangeSelect:function(){
+                    //select box 변경되었을 때 실행되는 함수
+                    var $this = this;
+                    var selectedId = $('#selectCategory').val();
+                    var selectedItem = $('#selectCategory option:selected').text().trim();
+
+                    $this.onSaveNowCategory(selectedId,selectedItem);
+                },
+                onSearchTag : function(){
+                    //태그 검색 시 조회되는 함수 
+                    var $this = this;
+                    var searchTag = $('#inputTag').val();
+
+                    if(searchTag=='' || searchTag==null){
+                        console.log("searchTag : " + searchTag);
+                        location.reload();
+                    }
+                    else{  
+                         $.ajax({
+                             type:"GET",
+                             url: "/data/methods/search/"+searchTag,
+                             contentType:'application/json',
+                             dataType:"json", 
+                             success:function(data){
+                                    $this.methodLists = data;
+                                    //$this.tempMethodLists = data;
+                                    $this.tempMethodLists = [
+                                                        {
+                                                            "msg": "초기화"
+                                                        }
+                                                        ]
+                                    for(var index =0; index<data.length; index++){
+                                        $this.tempMethodLists.push(data[index]);    
+                                    }
+                                    $this.totalCount = $this.methodLists.length; 
+                                    $this.page();
+                                },
+                             error:function(e){
+                                 alert(e.responseText);
+                             }
+                         });
+                     }
+                },               
+                onSaveNowCategory : function(selectedId, selectedCategory){
+                    //선택한 카테고리를 기억하기 위해 저장하는 함수
+                        var $this = this;
+
+                        var requestParam={
+                            id: selectedId,
+                            category: selectedCategory
+                        };
+
+                      $.ajax({
+                            type:"POST",
+                            url: "/data/selected/category",
+                            contentType:'application/json',
+                            dataType:"json",
+                            data: JSON.stringify(requestParam),
+                            success:function(response){
+                                console.log(response);
+                                $this.selectedCategory = selectedCategory //현재카테고리 바뀐거 데이터 갱신
+                                $this.onSearchCategory(selectedCategory); //선택한 항목의 리스트 조회
+                            },
+                            error:function(e){
+                                alert(e.responseText);
+                            }
+                        });            
+                },
+                onInit:function(){
+                    //초기화 (클릭할때 모달자체를 초기화 하는 부분)
+                    var $this = this;
+
+                    //입력,출력매개변수 json과 table을 위한 변수
+                    $this.showInput=true,
+                    $this.showTable=false,
+                    $this.showOutput=true,
+                    $this.showOutTable=false,
+
+                    $this.category='';
+                    $this.methodId='';
+                    $this.title='';
+                    $this.url='';
+                    $this.methodType='';
+                    $this.requestType='';
+                    $this.tags='';
+                    $this.note='';
+                    $this.inputParam='';
+                    $this.outputParam='';
+                    $this.responseCaseIndex =''; 
+                    $this.responseCases = [       
+                                        { 
+                                            "resTitle" : "", 
+                                            "resCode" : "", 
+                                            "resType" : "",
+                                            "resOption" : "",
+                                            "resBody" : ""
+                                        }
+                                    ];
+                },               
+                detailModal : function(id){
+                //목록을 클릭했을 때 보여지는 세부 내용들 조회
+                  var $this = this;
+                  $this.showInput=true;
+                  $this.showTable=false;
+                  $this.showOutput=true;
+                  $this.showOutTable=false;
+                  
+                  $.ajax({
+                        type:"GET",
+                        url: "/data/methods/"+id,
+                        contentType:'application/json',
+                        dataType:"json", 
+                        success:function(data){
+                            
+                            $this.methodId = data._id;
+                            $this.category = data.category; 
+                            $this.title = data.title;
+                            $this.url = data.url;
+                            $this.methodType = data.methodType;
+                            $this.requestType = data.requestType;
+                            $this.tags = data.tags;
+                            $this.note = data.note;
+                            $this.inputParam = data.inputParam;
+                            $this.outputParam = data.outputParam;
+                            $this.responseCaseIndex = data.responseCaseIndex;
+                            $this.responseCases = data.responseCases;
+
+                        },
+                        error:function(e){
+                            alert(e.responseText);
+                        }
+                    });
+                },
+
+                addResMsg : function(){
+                //응답메세지 추가버튼(+)눌렀을 때 생성(=responseCases리스트에 배열요소 하나 추가)
+                   var newResponseMessage =   { 
+                                                "resTitle" : "", 
+                                                "resCode" : "", 
+                                                "resType" : "",
+                                                "resOption" : "",
+                                                "resBody" : ""
+                                        };
+                    this.responseCases.push(newResponseMessage);
+                },
+
+                deleteResMsg : function(index){
+                    //응답메세지 삭제 했을 때 해당 index 배열요소를 삭제
+                    //console.log("~~ delete responseCases ~~");
+                    if(confirm("정말 삭제하시겠습니까?")==true){
+                        this.responseCases.splice(index,1); // index에서 1개 삭제
+                        alert('삭제 완료 !');
+                    }
+                    else{
+                        return;
+                    } 
+                },
+
+                onSaveJson:function(paramType){
+                    //입력매개변수, 출력매개변수의 json 입력창에서 개별 저장하는 부분
+                    var $this = this;
+                    var requestParam={};
+
+                    if (paramType=='input'){
+
+                        var check = $this.validJson(paramType);
+                        if(check == true){
+
+                            var json = JSON.parse($this.inputParam.replace(/\r\n/g, ''));
+                            
+                            requestParam={
+                                inputParam: JSON.stringify(json),
+                                type:'input'
+                            };
+
+                        }else if(check==false){
+                            alert('JSON 구조가 맞지 않습니다. 다시 확인해주세요!');
+                            return;
+                        }
+                    }
+                    else if(paramType=='output'){
+
+
+                        var check = $this.validJson(paramType);
+                        if(check == true){
+                            var json = JSON.parse($this.outputParam.replace(/\r\n/g, ''));
+                            requestParam={
+                                        outputParam: JSON.stringify(json),
+                                        type:'output'
+                                    };
+
+                        }else if(check==false){
+                            alert('JSON 구조가 맞지 않습니다. 다시 확인해주세요!');
+                            return;
+                        }
+                    }
+
+
+                    if(confirm("Json 입력을 저장 하시겠습니까?")==true){ 
+                        
+                        if($this.methodId=='' || $this.methodId==null)   alert('API를 먼저 저장해주세요!');
+                        else{
+
+                            $.ajax({
+                                        type:"PUT",
+                                        url: "/data/methods/input/"+$this.methodId,
+                                        contentType:'application/json',
+                                        dataType:"json",
+                                        data: JSON.stringify(requestParam),
+                                        success:function(response){
+                                            console.log(response);
+                                            alert('저장완료!');                                       
+                                        },
+                                        error:function(e){
+                                            alert(e.responseText);
+                                        }
+                                    });
+                                    setTimeout(function(){
+                                                $this.onGetJsonInOut($this.methodId);
+                                            },1000);
+                        }
+                    }
+                },
+
+                onGetJsonInOut:function(nowMethodId){
+                    //개별적으로 입력/출력 json 입력에 대해서 저장한 것을 그대로 조회하는 함수
+                    var $this= this;
+                    $.ajax({
+                        type:"GET",
+                        url: "/data/methods/"+ nowMethodId,
+                        contentType:'application/json',
+                        dataType:"json",
+                        async : true,
+                        success:function(data){
+                            $this.inputParam = data.inputParam;
+                            $this.outputParam = data.outputParam;
+                        },
+                        error:function(e){
+                            alert(e.responseText);
+                        }
+                    });   
+                },
+                validResCode:function(index){
+                    //응답메세지에서 Response Code가 숫자만 입력됬는지 확인하는 함수
+                    var validValue = this.responseCases[index].resCode.replace(/[^0-9]/g, '');
+                    
+                    if(validValue==''||validValue==null){
+                        alert('숫자만 입력해주세요!');
+                        this.responseCases[index].resCode='';
+                    }
+                },
+                validJson:function(vaildType){
+                    //입력/출력 json형식 유효성검사
+
+                    if(vaildType == 'input'){
+                        try{
+                            if(this.inputParam =="" || this.inputParam ==null || typeof this.inputParam=="undefined") return null;
+                            var json = JSON.parse(this.inputParam); //정상적인 json type이 아닌경우 exception 반환
+                            if(typeof json ==='object'){return true;} 
+                        } catch(e){
+                            return false;
+                        }
+                    }
+
+                    if(vaildType == 'output'){
+                        try{
+                            if(this.outputParam =="" || this.outputParam ==null || typeof this.outputParam=="undefined") return null;
+                            var json = JSON.parse(this.outputParam); //정상적인 json type이 아닌경우 exception 반환
+                            if(typeof json ==='object'){return true;} 
+                        } catch(e){
+                            return false;
+                        }
+                    }
+                },
+                showTogle:function(btnType, paramType){
+                    //입력매개변수 토글버튼
+                    if(paramType =='inputParam'){
+                        if(btnType == 'input'){
+                        this.showInput = true;
+                        this.showTable=false;
+                         }
+                        else if(btnType =='table'){
+                            this.showInput = false;
+                            this.showTable=true;
+                        }
+                    }
+
+                    //출력매개변수 토글버튼
+                    else if(paramType == 'outputParam'){
+                        if(btnType == 'input'){
+                            this.showOutput = true;
+                            this.showOutTable=false;
+                         }
+                        else if(btnType =='table'){
+                            this.showOutput = false;
+                            this.showOutTable=true;
+                        }
+                    }
+                },  
+                onDeleteData:function(){
+                    //API항목 삭제하는 함수
+                    if(confirm("정말 삭제하시겠습니까?")==true){                                      
+                        $.ajax({
+                                type:"DELETE",
+                                url: "/data/methods/"+this.methodId,
+                                contentType:'application/json',
+                                dataType:"json",
+                                success:function(response){
+                                    console.log(response);
+                                    alert('삭제 완료!');
+                                },
+                                error:function(e){
+                                    alert(e.responseText);
+                                }
+                            });
+                    }
+                    else{
+                        return;
+                    }
+                    setTimeout(function(){
+                        $('#addNewMethod').modal('hide');
+                        location.reload();
+                    },1000);
+                },
+                onSaveData : function(){
+                    //console.log("~~~onSaveData~~~");
+
+                    //기본메세지설정 validation
+                    var chk=0;
+                    var optionIndex;
+                    
+                    if(this.category =='' || this.category==null || this.category.length==0){
+                        alert('카테고리를 입력해주세요');
+                        return;
+                    }
+
+
+                    if(this.title =='' || this.title==null || this.title.length==0){
+                        alert('메소드명을 입력해주세요');
+                        return;
+                    }
+
+                    if(this.responseCases.length==0 || this.responseCases == null){
+                        alert('응답 메세지를 입력해주세요.');
+                        return;
+                    }
+
+                    
+
+                    for(var i=0; i<this.responseCases.length ; i++){
+                        if(this.responseCases[i].resOption=="YES"){
+                            chk++
+                            optionIndex = i;
+                        } 
+                    }
+                    if (chk==0){
+                        alert('기본메세지를 설정 해주세요.');
+                        return;
+                    }
+                    else if(chk == 1){
+                        this.responseCaseIndex = optionIndex; //응답메세지가 다중일 때, 기본응답메세지의 index를 찾아서 저장하기 위한 부분
+                    }
+                    else if (chk>1){
+                        alert('기본메세지설정은 한 개만 가능합니다. 다시 확인 해주세요.');
+                        return;
+                    }
+
+                    if((this.inputParam !="" || typeof this.inputParam !="undefined" || this.inputParam !=null) && (this.validJson('input') == false)){
+                        alert(' 입력매개변수 JSON 구조가 맞지 않습니다. 다시 확인해주세요!');
+                        return;
+                    }
+
+                    if(( this.outputParam !="" || typeof this.outputParam !="undefined" || this.outputParam !=null ) && (this.validJson('output') == false)){
+                        alert(' 출력매개변수 JSON 구조가 맞지 않습니다. 다시 확인해주세요!');
+                        return;
+                    }
+
+                    for(var j=0; j<this.responseCases.length ; j++){
+                        try{
+                            if(this.responseCases[j].resBody == null || this.responseCases[j].resBody == "" || typeof this.responseCases[j].resBody=="undefined"  ) continue;
+
+                            var json = JSON.parse(this.responseCases[j].resBody.replace(/\r\n/g,'')); //정상적인 json type이 아닌경우 exception 반환
+                            if(typeof json ==='object'){
+                                this.responseCases[j].resBody = JSON.stringify(json); //저장될때 엔터값 제거하여 저장하기위해
+                            } 
+
+                        } catch(e){
+                            alert((j+1)+'번째 응답메세지 Body의 Json을 확인해주세요!' );
+                            return;
+                        }
+                    }
+                    
+
+
+                    if(this.inputParam == '' || this.inputParam ==null || typeof this.inputParam =='undefined') {
+                        this.inputParam ='';
+                    }
+                    else if(this.inputParam != '' || this.inputParam !=null || typeof this.inputParam !='undefined') {
+                        this.inputParam = JSON.stringify(JSON.parse(this.inputParam.replace(/\r\n/g, '')));
+                    }
+
+
+                    if(typeof this.outputParam =="undefined" || this.outputParam == '' || this.outputParam ==null){
+                        this.outputParam='';
+                    }
+                    else if(typeof this.outputParam !="undefined" || this.outputParam != '' || this.outputParam !=null ) {
+                        this.outputParam = JSON.stringify(JSON.parse(this.outputParam.replace(/\r\n/g, '')));
+                    }
+
+                    //카테고리는 영어소문자로만 저장되게 함
+                    var lowerCast = this.category;
+                    var lowerCategory = lowerCast.toLowerCase();
+
+                    var requestParam={
+                        category: lowerCategory,
+                        title: this.title,
+                        url: this.url,
+                        methodType: this.methodType,
+                        requestType: this.requestType,
+                        tags: this.tags,
+                        note: this.note,
+                        inputParam: this.inputParam,
+                        outputParam: this.outputParam,
+                        responseCaseIndex:this.responseCaseIndex,
+                        responseCases : this.responseCases
+                    };
+
+                    console.log("save data : " + JSON.stringify(requestParam));
+                    console.log("save data2 : " + requestParam);
+
+                    if(confirm("저장 하시겠습니까?")==true){  
+
+                            if(this.methodId=='' || this.methodId==null) {
+                                //저장할때
+                                    $.ajax({
+                                        type:"POST",
+                                        url: "/data/methods",
+                                        contentType:'application/json',
+                                        dataType:"json",
+                                        data: JSON.stringify(requestParam),
+                                        success:function(response){
+                                            console.log(response);
+                                            alert('저장완료!');
+                                        },
+                                        error:function(e){
+                                            alert(e.responseText);
+                                        }
+                                    });
+                            }
+                            //수정할때
+                                else if(this.methodId !=null || this.methodId!=''){
+                                    //console.log("~~update ~~");
+                                    $.ajax({
+                                        type:"PUT",
+                                        url: "/data/methods/"+this.methodId,
+                                        contentType:'application/json',
+                                        dataType:"json",
+                                        data: JSON.stringify(requestParam),
+                                        success:function(response){
+                                            console.log(response);
+                                            alert('수정완료!');
+                                        },
+                                        error:function(e){
+                                            alert(e.responseText);
+                                        }
+                                    });
+                                }
+
+                    }
+                    else{
+
+                        return;
+                    }
+
+                    setTimeout(function(){
+                        $('#addNewMethod').modal('hide');
+                        location.reload();
+                    },1000);
+                },
+                movePage:function(nowPageNum){    
+                /*
+                (현재페이지-1) * PageRecordCount ~ 현재페이지 * PageRecordCount
+                으로 보여줄 methodList index를 계산함
+                 startIndex부터 endIndex(포함 X)까지
+
+                slice() 메소드는 begin부터 end 전까지의 복사본을 새로운 배열 객체로 반환한다.
+                즉, 원본 배열은 수정되지 않는다.
+                */
+               
+                this.nowPage = nowPageNum;
+                this.page();
+     /*           var startRownum = (this.nowPage-1) * this.pageRecordCount + 1; //테이블 행 번호첫번째 
+                var endRownum = this.nowPage * this.pageRecordCount;  //테이블 행 번호 마지막
+                this.methodLists = this.tempMethodLists.slice(startRownum, endRownum+1);
+
+                if(param=="hello2"){
+                    
+                    var groupNo = Math.floor(this.nowPage / this.pageCount + (this.nowPage % this.pageCount >0 ? 1: 0)); 
+                    var endPage = groupNo * this.pageCount;
+                    var startPage = endPage - (this.pageCount -1);
+                    console.log("groupNo : "+groupNo);
+                    console.log("endPage : "+endPage);
+                    console.log("startPage : "+startPage);
+
+                    this.paging ="";
+                    for(var ii = startPage ; ii<=endPage ; ii++){
+                        //동적으로 목록에 따라 하단에 숫자 번호가 보여지는 부분
+                            this.paging += "<li class='page-item'><a class='page-link' href=\"javascript:movePage("+ii+")\">"+ii+"<span class='sr-only'>"+ii+"<span></a></li>"    
+                    }
+
+                }*/
+      
+                },       
+               
+                page:function(){
+                    //페이지 번호 목록 나열
+                    console.log("totalCount:"+this.totalCount);
+
+                    if(this.nowPage==0) this.nowPage=1;
+
+                    var totalPage2 = Math.ceil( this.totalCount /this.pageRecordCount + ((this.totalCount % this.pageRecordCount >0 ? 1 : 0))) ; //총 생성될 페이지 수
+                    
+                    var totalPage = Math.ceil( this.totalCount /this.pageRecordCount) ; //총 생성될 페이지 수
+                    console.log("totalPage:"+totalPage);
+
+
+                    console.log("totalPage2:"+totalPage2);
+                    console.log("nowPage:"+this.nowPage);
+
+                    /*
+                    if(this.nowPage>totalPage){
+                        this.nowPage = totalPage;
+                    }
+                    console.log("pageRecordCount:"+this.pageRecordCount);
+                    console.log("now-1 : "+ (this.nowPage - 1) );
+                    */
+                    
+                    var startRownum = (this.nowPage-1) * this.pageRecordCount + 1; //테이블 행 번호첫번째 
+                    var endRownum = this.nowPage * this.pageRecordCount;  //테이블 행 번호 마지막
+                    this.methodLists = this.tempMethodLists.slice(startRownum, endRownum+1);
+
+                    console.log("startRownum : " + startRownum);
+                    console.log("endRownum : "+endRownum);
+
+
+                    var groupNo = Math.floor(this.nowPage / this.pageCount + (this.nowPage % this.pageCount >0 ? 1: 0)); 
+                    var endPage = groupNo * this.pageCount;
+                    var startPage = endPage - (this.pageCount -1);
+                    console.log("groupNo : "+groupNo);
+                    console.log("endPage : "+endPage);
+                    console.log("startPage : "+startPage);                
+
+                    
+
+                   /* if(endPage ==0){
+                        startPage=1;
+                        endPage=10;
+                    } */
+
+                    if(endPage > totalPage){
+                        endPage = totalPage
+                    }
+
+                    var prevPage = startPage - this.pageCount;
+                    var nextPage = startPage + this.pageCount;
+                    
+
+                    if(prevPage < 1){
+                        prevPage = 1;
+                    }
+                    if(nextPage > totalPage){
+                        nextPage = totalPage;
+                    }
+
+                    console.log("prevPage : "+prevPage);
+                    console.log("nextPage : "+nextPage);
+
+                    this.paging ="";
+                    if(nextPage <= this.pageCount+1){
+                        this.paging ="<li class='page-item disabled'><span class='page-link'>이전</span></li>"
+                    }
+                    else{
+                        this.paging="<li class='page-item'><a class='page-link' href=\"javascript:movePage("+(startPage - this.pageCount)+")\" aria-label='이전'><span aria-hidden='true'>이전</span></a></li>"
+                    }
+
+                    for(var ii = startPage ; ii<=endPage ; ii++){
+                        //동적으로 목록에 따라 하단에 숫자 번호가 보여지는 부분
+                        this.paging += "<li class='page-item'><a class='page-link' href=\"javascript:movePage("+ii+")\">"+ii+"<span class='sr-only'>"+ii+"<span></a></li>"    
+                    }
+
+                    if(nextPage != totalPage){
+                        this.paging +="<li class='page-item'><a class='page-link' href=\"javascript:movePage("+(startPage + this.pageCount)+")\" aria-label='다음'><span aria-hidden='true'>다음</span></a></li>"
+                    }
+                    else{
+                        this.paging +="<li class='page-item disabled'><span class='page-link'>다음</span></li>"
+                    }
+                }
+ 
+
+            }
+            
+        });
+
+        $(document).ready(function () {
+            jsonEditorInit('inputJsonTable', 'inputParam', 'inputJsonArea', 'btnTablePart', 'btnInputPart');
+            jsonEditorInit('outputJsonTable', 'outputParam', 'outputJsonArea', 'btnOutTablePart', 'btnOutputPart');          
+        });  
+
+        /*
+        $('#inputParam').keyup(function () {
+            var badJSON = document.getElementById('inputParam').value;
+            console.log("badjson:"+badJSON);
+            var parseJSON = JSON.parse(badJSON);
+            var JSONInPrettyFormat = JSON.stringify(parseJSON, undefined, 4);
+            document.getElementById('inputParam').value = JSONInPrettyFormat;
+
+        });
+        */
+        function onKeyEnter(){
+        //enterkey눌렀을 때 조회되도록, return이 있는 건 검색 후 refresh되어서 처리해놓음
+            if(event.keyCode == 13){
+                apiTableVue.onSearchTag();
+                return false;
+             }
+             return true;
+        }
+
+        //동적으로 화면을 그려서 vue에 있는 함수를 호출하기 위한 함수
+        function movePage(nowPageNum){
+            apiTableVue.movePage(nowPageNum);
+        }
+
+        var modalConfirm = function(callback){
+  
+            $("#btn-confirm-yes").on("click", function(){
+                callback(true);
+                $("#deleteModal").modal('hide');
+
+            });
+            
+            $("#btn-confirm-no").on("click", function(){
+                callback(false);
+                $("#deleteModal").modal('hide');
+            });
+        };
+
+        modalConfirm(function(confirm){
+            if(confirm){
+                $('.alert').show();
+                setTimeout(function(){
+                    $('.alert').alert('close');
+                },1000);
+            }else{
+
+            }
+        });
+
+
+        //모달 중복
+        $(document).on({
+            'show.bs.modal': function() {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function() {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            },
+
+            'hidden.bs.modal': function() {
+                if ($('.modal:visible').length > 0) {
+                setTimeout(function() {
+                    $(document.body).addClass('modal-open');
+                }, 0);
+                }
+            }
+        }, '.modal');  
+</script>
+</body>
+</html>

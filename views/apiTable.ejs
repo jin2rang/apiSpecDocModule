@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>메소드 목록</title>
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap-reboot.min.css"> -->
+    <link rel="stylesheet" href="css/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-4.3.1-dist/css/bootstrap-grid.min.css">
+    <!-- font -->
+    <link rel="stylesheet" href="css/soldev/css/layout.css">
+    <link rel="stylesheet" href="css/soldev/css/searchTable.css">
+    <link rel="stylesheet" href="css/fontawesome-free-5.8.2-web/css/all.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="application-form">
+    <!-- delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">확인</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">삭제할까요?</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-confirm-no">취소</button>
+                    <button type="button" class="btn btn-primary" id="btn-confirm-yes">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 새 메소드 추가 Modal -->
+    <div class="modal fade" id="addNewMethod" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">새 메소드 추가</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group row">
+                            <label for="title" class="col-sm-2 col-form-label">Title</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control-plaintext" id="title"
+                                    value="평가목록 가져오기">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="title" class="col-sm-2 col-form-label">URL</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control-plaintext" id="title" value="/appraisal/list">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Method" class="col-sm-2 col-form-label">Method</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="Method">
+                                    <option>GET</option>
+                                    <option>POST</option>
+                                    <option>PUT</option>
+                                    <option>DELETE</option>
+                                    <option>OPTION</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="type" class="col-sm-2 col-form-label">Type</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="type">
+                                    <option>REAL</option>
+                                    <option>STUB</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="tag" class="col-sm-2 col-form-label">Tag</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control-plaintext" id="tag" value="시스템, 테스트">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="desc" class="col-sm-2 col-form-label">설명</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="desc" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                                                
+     <!--request parameters-->
+
+                        <div class="req-msg-wrap bg-light" id="reqMsg">
+                            <div class="clearfix modal_msg_align_center">
+                                <p class="title float-left">Request Parameter (입력 매개변수)</p>
+                            </div>
+                            <!-- alert -->
+                            <div class="alert alert-danger fade show" role="alert" style="display:none;">
+                                삭제되었습니다.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="req-msg-desc bg-light">
+                                <div class="form-group row">
+                                    <label for="repTitle" class="col-sm-2 col-form-label">Title</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control-plaintext" id="repTitle" value="기본">
+                                    </div>
+                                   <!-- <div class="col-sm-2">
+                                        <button type="button" class="float-right btn btn-outline-danger btn-sm btn-delete" data-toggle="modal" data-target="#deleteModal">삭제</button>
+                                    </div>-->
+                                </div>
+                                <div class="form-group row">
+                                    <label for="responseCode" class="col-sm-2 col-form-label">request type</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control-plaintext" id="responseCode"
+                                            value="200">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="responseType" class="col-sm-2 col-form-label">request note</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control-plaintext" id="responseType"
+                                            value="Application/json">
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- <div id="replace-wrapper"></div>
+                            <div class="btn-plus-wrap text-center">
+                                <button type="button" class="btn btn-secondary rounded-circle btn-plus">+</button>
+                            </div>-->
+                        </div>
+     <!--response message-->
+
+                        <div class="res-msg-wrap bg-light">
+                            <div class="clearfix ">
+                                <p class="title float-left">응답 메시지</p>
+                            </div>
+                            <!-- alert -->
+                            <div class="alert alert-danger fade show" role="alert" style="display:none;">
+                                삭제되었습니다.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="res-msg-desc bg-light">
+                                <div class="form-group row">
+                                    <label for="repTitle" class="col-sm-2 col-form-label">Title</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control-plaintext" id="repTitle"
+                                            value="기본">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" class="float-right btn btn-outline-danger btn-sm btn-delete" data-toggle="modal" data-target="#deleteModal">삭제</button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="defaultCheck" class="col-sm-2 col-form-label">defaultCheck</label>
+                                    <div class="col-sm-10 modal_msg_align_center">
+                                        <input type="radio" name="reqRadioCheck">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="responseCode" class="col-sm-2 col-form-label">responseCode</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control-plaintext" id="responseCode"
+                                            value="200">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="responseType" class="col-sm-2 col-form-label">responseType</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control-plaintext" id="responseType"
+                                            value="Application/json">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="body" class="col-sm-2 col-form-label">body</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" id="body" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="replace-wrapper"></div>
+                            <div class="btn-plus-wrap text-center">
+                                <button type="button" class="btn btn-secondary rounded-circle btn-plus">+</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-outline-primary">목록</button> -->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary">저장</button>
+                    <button type="button" class="btn btn-danger btn-delete" data-toggle="modal" data-target="#deleteModal">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- alert -->
+    <div class="alert alert-danger fade show" role="alert" style="display:none;">
+        삭제되었습니다.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="container">
+            <h1 class="logo"></h1>
+        </nav>
+    </div>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="inner-wrap mt-5">
+                <h2 class="title page-title">페이지 제목을 적어주세요.</h2>
+                <div class="mt-4">
+                    <form>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" placeholder="검색 태그를 입력해주세요"
+                                aria-label="검색 태그를 입력해주세요" aria-describedby="search">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">조회</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-5">
+                    <div class="clearfix">
+                        <h3 class="float-left title table-title">메소드 목록</h3>
+                        <div class="float-right"><button type="button" class="btn btn-outline-primary"  data-toggle="modal" data-target="#addNewMethod">새 메소드 추가</button>
+                    </div>
+                    </div>
+                    <div class="table-wrap mt-2">
+                        <table class="table table-hover">
+                            <colgroup>
+                                <col width="8%">
+                                <col width="20%">
+                                <col width="15%">
+                                <col width="*%">
+                                <col width="15%">
+                            </colgroup>
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col" class="text-center">No.</th>
+                                    <th scope="col" class="text-center">Title</th>
+                                    <th scope="col" class="text-center">Type</th>
+                                    <th scope="col" class="text-center">URL</th>
+                                    <th scope="col" class="text-center">responseCode</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row" class="text-center">1</th>
+                                    <th scope="row" class="text-left">평가목록 가져오기</th>
+                                    <td class="text-center"><span class="btn btn-secondary btn-sm">stub</span></td>
+                                    <td class="text-left">/appraisal/list</td>
+                                    <td class="text-center"><span class="btn btn-warning btn-sm">200</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-center">2</th>
+                                    <th scope="row" class="text-left">평가목록 가져오기</th>
+                                    <td class="text-center"><span class="btn btn-success btn-sm">real</span></td>
+                                    <td class="text-left">/appraisal/list</td>
+                                    <td class="text-center"><span class="btn btn-danger btn-sm">500</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-center">3</th>
+                                    <th scope="row" class="text-left">평가목록 가져오기</th>
+                                    <td class="text-center"><span class="btn btn-secondary btn-sm">stub</span></td>
+                                    <td class="text-left">/appraisal/list</td>
+                                    <td class="text-center"><span class="btn btn-warning btn-sm">200</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-center">4</th>
+                                    <th scope="row" class="text-left">평가목록 가져오기</th>
+                                    <td class="text-center"><span class="btn btn-success btn-sm">real</span></td>
+                                    <td class="text-left">/appraisal/list</td>
+                                    <td class="text-center"><span class="btn btn-danger btn-sm">500</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-wrap mt-5">
+                        <nav aria-label="...">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">다음</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="css/jQuery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="css/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $('.btn.btn-plus').click(function(){
+                $('#replace-wrapper').append('<div class="res-msg-desc">'+
+                                                '<div class="form-group row">'+
+                                                    '<label for="repTitle" class="col-sm-2 col-form-label">Title</label>'+
+                                                    '<div class="col-sm-8">'+
+                                                        '<input type="text" readonly class="form-control-plaintext" id="repTitle" value="기본"></div>'+
+                                                        '<div class="col-sm-2">'+
+                                                            '<button type="button" class="float-right btn btn-outline-danger btn-sm">삭제</button></div></div>'+
+                                                            '<div class="form-group row">'+
+                                                    '<label for="defaultCheck" class="col-sm-2 col-form-label">defaultCheck</label>'+
+                                                    '<div class="col-sm-10 modal_msg_align_center">'+
+                                                        '<input type="radio" name="reqRadioCheck"></div></div>'+
+                                                '<div class="form-group row">'+
+                                                    '<label for="responseCode" class="col-sm-2 col-form-label">responseCode</label>'+
+                                                    '<div class="col-sm-10">'+
+                                                        '<input type="text" readonly class="form-control-plaintext" id="responseCode" value="200"></div></div>'+
+                                                '<div class="form-group row">'+
+                                                    '<label for="responseType" class="col-sm-2 col-form-label">responseType</label>'+
+                                                    '<div class="col-sm-10">'+
+                                                        '<input type="text" readonly class="form-control-plaintext" id="responseType" value="Application/json"></div></div>'+
+                                                '<div class="form-group row">'+
+                                                    '<label for="body" class="col-sm-2 col-form-label">body</label>'+
+                                                    '<div class="col-sm-10">'+
+                                                        '<textarea class="form-control" id="body" rows="3"></textarea></div></div></div>');
+            });
+            //reset modal input
+            $('.modal').on('hidden.bs.modal', function (e) {
+                console.log("Modal hidden");
+                $('#replace-wrapper').html('');
+            });
+        });
+
+        var modalConfirm = function(callback){
+  
+            $("#btn-confirm-yes").on("click", function(){
+                callback(true);
+                $("#deleteModal").modal('hide');
+
+            });
+            
+            $("#btn-confirm-no").on("click", function(){
+                callback(false);
+                $("#deleteModal").modal('hide');
+            });
+        };
+
+        modalConfirm(function(confirm){
+            if(confirm){
+                //Acciones si el usuario confirma
+                $('.alert').show();
+                setTimeout(function(){
+                    $('.alert').alert('close');
+                },1000);
+            }else{
+
+            }
+        });
+
+
+        //모달 중복
+        $(document).on({
+            'show.bs.modal': function() {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function() {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            },
+
+            'hidden.bs.modal': function() {
+                if ($('.modal:visible').length > 0) {
+                // restore the modal-open class to the body element, so that scrolling works
+                // properly after de-stacking a modal.
+                setTimeout(function() {
+                    $(document.body).addClass('modal-open');
+                }, 0);
+                }
+            }
+        }, '.modal');
+
+        //alert 
+        
+
+        
+    </script>
+    
+</body>
+
+</html>

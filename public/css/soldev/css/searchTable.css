@@ -1,0 +1,101 @@
+@charset "utf-8";
+/* gnb font icon definition */
+
+html {
+  height: 100%;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video 
+{
+     font-family: 'Noto Sans Korean', 'Noto Sans KR', 'Noto+Sans', '애플 SD 산돌고딕 Neo', 'Apple SD Gothic Neo', '맑은 고딕', 'Malgun Gothic', 'Helvetica Neue', Helvetica, Dotum, '돋움', sans-serif;
+     margin: 0;
+     padding: 0;
+     border: 0;
+     font-size: 14px;
+     letter-spacing: -0.8px;
+     vertical-align: baseline;
+}
+
+.alert{
+  font-size:16px;
+  margin-bottom:0px;
+}
+.alert .close span{font-size:24px;}
+.navbar {
+  position: relative;
+  z-index: 1000;
+  height: 70px;
+  padding: 0px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.navbar h1.logo {
+  width: auto;
+  height: 70px;
+  padding-left: 30px;
+}
+
+.navbar .logo a {
+  display: inline-block;
+  padding: 20px 0px;
+}
+
+.navbar .logo a img {
+  display: inline-block;
+  width: auto;
+  height: 30px;
+}
+
+.title {
+  font-weight: bold;
+  line-height: 1.43;
+  color: #292944;
+}
+
+.title.page-title {
+  font-size: 20px;
+}
+.title.table-title{
+  font-size: 18px;
+}
+
+.res-msg-wrap{
+  position:relative;
+  margin-top: 15px;
+  margin-right:-14px;
+  margin-left:-14px;
+}
+.res-msg-wrap .title{padding:10px 14px;}
+.res-msg-wrap .btn-plus-wrap{
+  position: absolute;
+  bottom:-16px;
+  width:100%;
+}
+.res-msg-desc{padding:14px; border-top:1px solid #eaeaea;}
+.res-msg-desc .form-group{margin-bottom:4px;}
+
+.req-msg-wrap{
+  position:relative;
+  margin-top: 15px;
+  margin-right:-14px;
+  margin-left:-14px;
+}
+.req-msg-wrap .title{padding:10px 14px;}
+.req-msg-wrap .btn-plus-wrap{
+  position: absolute;
+  bottom:-16px;
+  width:100%;
+}
+.req-msg-desc{padding:14px; border-top:1px solid #eaeaea;}
+.req-msg-desc .form-group{margin-bottom:4px;}
+
+.modal_msg_align_center {
+  display: flex;
+  align-items: center;
+}

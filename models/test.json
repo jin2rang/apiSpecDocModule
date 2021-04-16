@@ -1,0 +1,79 @@
+{
+    "category" : "SYS", 
+
+    "title" : "테스트", 
+
+    "url" : "/test", 
+
+    "methodType" : "POST",
+
+    "resquestType" : "stub", 
+
+    "tags" : "시스템, 테스트,조회문",
+    
+    "note" : "테스트 메소드",
+
+    "createDateTime" : "2020.04.20 13:30:45",
+
+    "lastUpdateTime" : "2020.04.20 13:30:45",
+    
+    "reqTitle" : "apiKey",
+
+    "reqType" : "String",
+
+    "reqNote" : "고유키입니다.",
+
+    "responseCaseIndex" : 1, 
+
+    "responseCases" : [ 
+        { 
+            "resTitle" : "기본", 
+
+            "resCode" : "200", 
+
+            "resType" : "Application/json",
+
+            "resOption" : "NO",
+
+            "resBody" : { 
+                "result" : "OK", 
+
+                "message" :"저장되었습니다." 
+            } 
+        }, 
+
+        { 
+
+            "resTitle" : "인증오류", 
+
+            "resCode" : "401", 
+
+            "resType" : "application/json",
+
+            "resOption" : "YES",
+
+            "resBody" : { 
+                "result" : "ERROR", 
+
+                "message" :"인증되지 않은 사용자입니다." 
+            } 
+        }, 
+        { 
+
+            "resTitle" : "서버오류-1. 일반", 
+
+            "resCode" : "500", 
+
+            "resType" : "application/json",
+
+            "resOption" : "NO",
+            
+            "resBody" : { 
+                "result" : "ERROR", 
+                
+                "message" :"서버 오류입니다." 
+            } 
+        } 
+    ] 
+}
+
